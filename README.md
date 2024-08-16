@@ -25,27 +25,34 @@ python -m pip install -e .
 
 #### Adding a Task
 ```bash
-taskbuddy --add "Task Description" --due "YYYY-MM-DD"
+taskbuddy add --task="Task Description" --due="DD-MM-YYYY"
 ```
 
-#### Listing Tasks
+#### List All Tasks
 ```bash
-taskbuddy --list
+taskbuddy ls --all
+```
+#### List Specific Task
+```bash
+taskbuddy ls --id=<task_id>
 ```
 
-#### Updating a Task
+#### Updating Task
 ```bash
-taskbuddy --update TASK_ID --description "New Description" --due "YYYY-MM-DD"
+taskbuddy update --id=<task_id> --task="New Description" --due="DD--MM-YYYY" --status=0
 ```
 
-#### Deleting a Task
+#### Deleting Task
 ```bash
-taskbuddy --delete TASK_ID
+taskbuddy del --id=<task_id>
 ```
-
-#### Marking a Task as Complete
+#### Deleting All Task
 ```bash
-taskbuddy complete TASK_ID
+taskbuddy del --all
+```
+#### Searching By Due Date
+```bash
+taskbuddy search --due="DD--MM-YYYY"
 ```
 
 ### Contributing
@@ -53,3 +60,14 @@ Feel free to contribute to TaskBuddy by submitting pull requests or opening issu
 
 ### License
 This project is licensed under the MIT License. See the LICENSE file for details.
+
+### Early Stage Development - Pre-Alpha Version Warning
+This software is currently in the Pre-Alpha stage, meaning it is in a very early phase of development & is under heavy development. At this stage:
+
+* **Active Development**: Core features and functionalities are still being built. Expect frequent updates and significant changes as the project evolves.
+
+* **Unstable**: The software may have many bugs, incomplete features and may not work as expected. Breaking changes can occur at any time without warning.
+
+* **For Testing Purposes Only**: This version is intended for testing, experimentation, and feedback. It is not suitable for production environments.
+
+* **Feedback Welcome**: We encourage developers and early adopters to experiment with this version and provide feedback. Your input is valuable in shaping the future of the project.
