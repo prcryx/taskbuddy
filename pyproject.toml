@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "taskbuddy"
+version = "1.0.0"
+authors = [
+    {name = "prcryx", email = "me.prc.fo@gmail.com"},
+]
+description = "TaskBuddy is a powerful, easy-to-use CLI tool designed for effortless task scheduling and management that boost your productivity and unlock your true potential! 🌟"
+readme = "README.md"
+dependencies = [
+    'click'
+]
+
+[tool.setuptools]
+packages = ["taskbuddy"]
+
+[project.scripts]
+taskbuddy = "taskbuddy.__main__:cli"
