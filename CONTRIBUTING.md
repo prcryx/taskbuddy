@@ -1,3 +1,32 @@
+## Commit Messages Convention
+We follow the Default Commits specification by commitlint package to ensure a consistent and informative commit history. This helps us automate the release process and make it easier to understand the purpose of each change.
+
+### Commit Message Structure
+Each commit message should consist of a type, an optional scope, and a subject:
+
+```vim
+<type>(<scope>): <subject>
+```
+* `type`: A keyword that describes the purpose of the commit (e.g., feat, fix, docs, refactor).
+* `scope`: An optional keyword that provides additional context about what part of the codebase is affected (e.g., auth, api, ui).
+* `subject`: A brief description of the changes made.
+### Common Types
+* **feat**: Adding a new feature.
+* **fix**: Fixing a bug.
+* **docs**: Documentation changes.
+* **style**: Code style changes (formatting, white-space, etc.).
+* **refactor**: Code improvements without adding features or fixing bugs.
+* **test**: Adding or updating tests.
+* **build**: Changes to the build system or dependencies.
+* **ci**: Changes to CI configuration files or scripts.
+* **chore**: Maintenance tasks, such as updating dependencies or scripts.
+* **revert**: Reverting a previous commit.
+
+Please follow [commitlint](https://github.com/conventional-changelog/commitlint) package for detailed information.
+_____
+
+<br/>
+
 ## Branch Naming Convention
 
 To maintain a consistent and organized codebase, please follow these branch naming conventions:
