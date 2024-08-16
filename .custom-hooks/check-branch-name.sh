@@ -8,7 +8,7 @@ echo "Branch Name: $BRANCH_NAME"
 PRIMARY_REGEX="^(develop|staging|main|release/v[0-9]+\.[0-9]+\.[0-9]+)$"
 
 # Regular expression for valid secondary categories
-SECONDARY_REGEX="^(feature|bugfix|hotfix|docs|chore)/(no-ref|[A-Za-z0-9-]+)/"
+SECONDARY_REGEX="^(feature|bugfix|hotfix|docs|chore|refactor)/(no-ref|[A-Za-z0-9-]+)/"
 
 # Additional checks
 INVALID_CHARS_REGEX="[[:space:][:cntrl:]~^:?*\\\[@{}]"
@@ -36,7 +36,7 @@ elif [[ "$BRANCH_NAME" =~ $SECONDARY_REGEX ]]; then
     fi
 else
     echo "Error: Branch name does not follow the naming convention."
-    echo "Branch names should start with 'feature/.../', 'bugfix/.../', 'hotfix/.../, docs/.../, chore/.../, release/ 'etc."
+    echo "Branch names should start with 'feature/.../', 'bugfix/.../', 'hotfix/.../, 'refactor/.../' 'docs/.../', 'chore/.../', release/' etc."
     echo "Please check CONTRIBUTING.md for detailed info"
     exit 1
 fi
