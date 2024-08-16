@@ -1,8 +1,10 @@
+from datetime import datetime
 from pathlib import Path
 from typing import Union
 from taskbuddy.constants import (
     ASSET_DIRNAME,
     ART_FILENAME,
+    DD_MM_YYYY,
     DEFAULT_ART,
     DB_DIRNAME,
     SQLITE_DB_FILE,
@@ -46,3 +48,8 @@ def file_exists(dir_name: str, file_name: str) -> bool:
     project_path = Path.cwd()
     file_path = project_path / dir_name / file_name
     return file_path.exists()
+
+
+# Parse the date in DD-MM-YYYY format
+def parse_date_ddMMYYY(due_date: str) -> datetime:
+    return datetime.strptime(due_date, DD_MM_YYYY)

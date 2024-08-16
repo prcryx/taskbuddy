@@ -1,16 +1,16 @@
 import click
 
-# from taskbuddy.migrations import , tasks
 from taskbuddy.constants import DB_DIRNAME, MIGRATION_STATUS_FILENAME
-from taskbuddy.utils import get_default_db_path, print_header, file_exists
 from taskbuddy.migrations import run_migration
-
-DEFAULT_DB_PATH = get_default_db_path()
+from taskbuddy.tasks_manager import create_task_manager
+from taskbuddy.entities.task import Task
+from taskbuddy.utils import print_header, file_exists
 
 
 @click.group()
-def cli():
-    pass
+@click.pass_context
+def cli(ctx):
+    ctx.obj = create_task_manager()
 
 
 @cli.command()
@@ -23,6 +23,34 @@ def setup(db_path):
         run_migration(db_path)
     else:
         click.echo("Setup has already been completed.")
+
+
+@cli.command()
+@click.option(
+    "--task",
+    "task_description",
+    required=True,
+    help="Description of the task.",
+)
+@click.option(
+    "--due",
+    "due_date",
+    required=True,
+    help="Due date of the task in DD-MM-YYY format.",
+)
+@click.pass_context
+def add(ctx, task_description, due_date):
+    try:
+        task = Task.from_dict({"task": task_description, "due": due_date})
+
+        # Retrieve the TaskManager from the context and add the task
+        task_manager = ctx.obj
+        task_manager.add_task(task)
+
+        click.echo(f"Task added: {task}")
+
+    except ValueError as e:
+        click.echo(f"Error: {str(e)}")
 
 
 if __name__ == "__main__":
