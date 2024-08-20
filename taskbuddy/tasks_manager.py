@@ -1,5 +1,5 @@
 from taskbuddy.database import DatabaseConnectionFactory, SQLiteAdapter
-from taskbuddy.entities.task import Task
+from taskbuddy.types import Task
 
 
 class TaskManager:
