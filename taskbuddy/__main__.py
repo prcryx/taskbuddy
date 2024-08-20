@@ -1,9 +1,10 @@
 import click
 
+from taskbuddy.decorators import validate_setup
 from taskbuddy.constants import DB_DIRNAME, MIGRATION_STATUS_FILENAME
 from taskbuddy.migrations import run_migration
 from taskbuddy.tasks_manager import create_task_manager
-from taskbuddy.entities.task import Task
+from taskbuddy.entities import Task
 from taskbuddy.utils import print_header, file_exists
 
 
@@ -25,7 +26,8 @@ def setup(db_path):
         click.echo("Setup has already been completed.")
 
 
-@cli.command()
+# Add Task Functionality
+@cli.command(name="add")
 @click.option(
     "--task",
     "task_description",
@@ -39,7 +41,9 @@ def setup(db_path):
     help="Due date of the task in DD-MM-YYY format.",
 )
 @click.pass_context
+@validate_setup
 def add(ctx, task_description, due_date):
+    """Add new task."""
     try:
         task = Task.from_dict({"task": task_description, "due": due_date})
 
