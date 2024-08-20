@@ -1,10 +1,10 @@
 import click
 
-from taskbuddy.decorators import validate_setup
+from taskbuddy.types import Task
 from taskbuddy.constants import DB_DIRNAME, MIGRATION_STATUS_FILENAME
+from taskbuddy.decorators import validate_setup
 from taskbuddy.migrations import run_migration
 from taskbuddy.tasks_manager import create_task_manager
-from taskbuddy.entities import Task
 from taskbuddy.utils import print_header, file_exists
 
 
