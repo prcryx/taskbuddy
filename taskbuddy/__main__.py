@@ -1,10 +1,10 @@
 import click
-
+import shutil
 from taskbuddy.types import Task
 from taskbuddy.constants import DB_DIRNAME, MIGRATION_STATUS_FILENAME
 from taskbuddy.decorators import validate_setup
 from taskbuddy.migrations import run_migration
-from taskbuddy.tasks_manager import create_task_manager
+from taskbuddy.tasks_manager import TaskManager, create_task_manager
 from taskbuddy.utils import print_header, file_exists
 
 
@@ -55,6 +55,29 @@ def add(ctx, task_description, due_date):
 
     except ValueError as e:
         click.echo(f"Error: {str(e)}")
+
+
+# View All Task Functionality
+@cli.command(name="ls")
+@click.option("--all", "list_all", is_flag=True, required=True)
+@click.pass_context
+@validate_setup
+def list_tasks(ctx, list_all: bool):
+    """List tasks."""
+    task_manager: TaskManager = ctx.obj
+    if list_all:
+        tasks: Task = task_manager.view_all_tasks()
+        for task in tasks:
+            print_task(task)
+    else:
+        click.echo("Please specify --all to list all task.")
+
+
+# print task
+def print_task(task: Task):
+    terminal_width = shutil.get_terminal_size().columns
+    click.echo(task.to_dict())
+    click.echo("-" * terminal_width)
 
 
 if __name__ == "__main__":
