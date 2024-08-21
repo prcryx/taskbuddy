@@ -14,14 +14,21 @@ class DatabaseConnectionFactory:
 
 # SQLite Adapter for connection handling
 class SQLiteAdapter:
-    def __init__(self, connection):
+    def __init__(self, connection: sqlite3.Connection):
         self.connection = connection
+        self.cursor = connection.cursor()
 
     def execute(self, query, params=None):
-        with self.connection:
-            if params:
-                return self.connection.execute(query, params)
-            return self.connection.execute(query)
+        if params:
+            return self.cursor.execute(query, params)
+        return self.cursor.execute(query)
+
+    def commit(self):
+        self.connection.commit()
+
+    def fetch_all(self):
+        return self.cursor.fetchall()
 
     def close(self):
+        self.cursor.close()
         self.connection.close()

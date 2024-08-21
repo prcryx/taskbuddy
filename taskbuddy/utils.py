@@ -1,13 +1,16 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Union
+from dateutil import parser
+
+
 from taskbuddy.constants import (
     ASSET_DIRNAME,
     ART_FILENAME,
-    DD_MM_YYYY,
     DEFAULT_ART,
     DB_DIRNAME,
     SQLITE_DB_FILE,
+    DD_MM_YYYY_HH_MM,
 )
 
 
@@ -50,6 +53,20 @@ def file_exists(dir_name: str, file_name: str) -> bool:
     return file_path.exists()
 
 
-# Parse the date in DD-MM-YYYY format
-def parse_date_ddMMYYY(due_date: str) -> datetime:
-    return datetime.strptime(due_date, DD_MM_YYYY)
+# Parse and format the date in DD-MM-YYYY HH:MM format
+def to_datestr(date_str: str) -> str:
+    try:
+        # Parse the time string into a datetime object
+        parsed_time = parser.parse(date_str)
+        # Format the datetime object to [dd-mm-yyyy HH:MM] str
+        return parsed_time.strftime(DD_MM_YYYY_HH_MM)
+    except parser.ParserError as e:
+        raise ValueError(f"Could not parse the time string: {date_str}") from e
+
+
+def parse_to_datetime(date_str: str) -> datetime:
+    try:
+        dt_obj = parser.parse(date_str)
+        return dt_obj
+    except parser.ParserError as e:
+        raise ValueError(f"Could not parse the time string: {date_str}") from e
