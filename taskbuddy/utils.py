@@ -44,9 +44,7 @@ def get_path(
 # Get default db path
 def get_default_db_path(db_name: None) -> str:
     db_name = SQLITE_DB_FILE if db_name is None else db_name
-    return get_path(
-        DB_DIRNAME,
-    )
+    return get_path(DB_DIRNAME, db_name)
 
 
 # Check if the file exists or not
