@@ -15,13 +15,13 @@ def cli(ctx):
 
 
 @cli.command()
-@click.option("--db_path", default=None, help="setup database path")
-def setup(db_path):
-    """Setup the application (run migrations on first install)."""
+@click.option("--db_name", default=None, help="setup database path")
+def setup(db_name):
+    """Set up the application (run migrations on first install)."""
     art = print_header()
     click.echo(art)
     if not file_exists(DB_DIRNAME, MIGRATION_STATUS_FILENAME):
-        run_migration(db_path)
+        run_migration(db_name)
     else:
         click.echo("Setup has already been completed.")
 

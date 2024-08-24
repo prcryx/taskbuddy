@@ -11,13 +11,14 @@ from taskbuddy.utils import file_exists, get_path, get_default_db_path
 click.command()
 
 
-def run_migration(db_path: None):
+def run_migration(db_name: None):
     """Run SQL migrations from the sql/ directory."""
     if file_exists(DB_DIRNAME, MIGRATION_STATUS_FILENAME):
         return
 
     # Connect to SQLite database
-    db_path = get_default_db_path() if db_path is None else db_path
+    # db_path = get_default_db_path() if db_path is None else db_path
+    db_path = get_default_db_path(db_name)
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
