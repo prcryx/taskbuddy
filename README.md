@@ -14,7 +14,7 @@ To get started with TaskBuddy, clone the repository and install the required dep
 ```bash
 git clone https://github.com/prcryx/taskbuddy.git
 cd taskbuddy
-pip install -r requirements.txt
+pip install -r requirements/base.txt
 python -m pip install .
 ```
 or in dev mode you can install this as an editable package

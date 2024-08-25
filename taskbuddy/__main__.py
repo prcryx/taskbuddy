@@ -1,27 +1,28 @@
 import click
 import shutil
 from taskbuddy.types import Task
-from taskbuddy.constants import DB_DIRNAME, MIGRATION_STATUS_FILENAME
 from taskbuddy.decorators import validate_setup
 from taskbuddy.migrations import run_migration
 from taskbuddy.tasks_manager import TaskManager, create_task_manager
-from taskbuddy.utils import print_header, file_exists
+from taskbuddy.utils import print_header, db_status_file_exists
 
 
 @click.group()
 @click.pass_context
 def cli(ctx):
+    if not db_status_file_exists():
+        return
     ctx.obj = create_task_manager()
 
 
 @cli.command()
-@click.option("--db_path", default=None, help="setup database path")
-def setup(db_path):
-    """Setup the application (run migrations on first install)."""
+@click.option("--db_name", default=None, help="setup database path")
+def setup(db_name):
+    """Set up the application (run migrations on first install)."""
     art = print_header()
     click.echo(art)
-    if not file_exists(DB_DIRNAME, MIGRATION_STATUS_FILENAME):
-        run_migration(db_path)
+    if not db_status_file_exists():
+        run_migration(db_name)
     else:
         click.echo("Setup has already been completed.")
 
@@ -50,7 +51,6 @@ def add(ctx, task_description, due_date):
         # Retrieve the TaskManager from the context and add the task
         task_manager = ctx.obj
         task_manager.add_task(task)
-
         click.echo(f"Task added: {task}")
 
     except ValueError as e:
@@ -66,7 +66,7 @@ def list_tasks(ctx, list_all: bool):
     """List tasks."""
     task_manager: TaskManager = ctx.obj
     if list_all:
-        tasks: Task = task_manager.view_all_tasks()
+        tasks: [Task] = task_manager.view_all_tasks()
         for task in tasks:
             print_task(task)
     else:

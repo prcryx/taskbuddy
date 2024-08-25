@@ -1,23 +1,24 @@
 import sqlite3
 import click
 from taskbuddy.constants import (
-    DB_DIRNAME,
-    MIGRATION_STATUS_FILENAME,
     SQL_MIGRATION_DIRNAME,
 )
-from taskbuddy.utils import file_exists, get_path, get_default_db_path
+from taskbuddy.utils import (
+    get_path,
+    get_db_path,
+    db_status_file_exists,
+    write_status_file,
+)
 
 
-click.command()
-
-
-def run_migration(db_path: None):
+def run_migration(db_name: str = None):
     """Run SQL migrations from the sql/ directory."""
-    if file_exists(DB_DIRNAME, MIGRATION_STATUS_FILENAME):
+    if db_status_file_exists():
         return
 
     # Connect to SQLite database
-    db_path = get_default_db_path() if db_path is None else db_path
+    # db_path = get_default_db_path() if db_path is None else db_path
+    db_path = get_db_path(db_name)
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -37,9 +38,13 @@ def run_migration(db_path: None):
     conn.close()
 
     # Mark the migration as done
-    file_path = get_path(DB_DIRNAME, MIGRATION_STATUS_FILENAME)
-    with open(file_path, "w") as f:
-        f.write("True")
-        f.close()
+    try:
+        write_status_file(db_path)
+    except (OSError, IOError) as e:
+        # Handle specific I/O related exceptions
+        click.echo(f"An error occurred while writing the status file: {e}")
+    except Exception as e:
+        # Handle unexpected exceptions
+        click.echo(f"An unexpected error occurred: {e}")
 
     click.echo("[200|Ok]: Migrations completed successfully.")

@@ -2,7 +2,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Union
 from dateutil import parser
-
+import os
 
 from taskbuddy.constants import (
     ASSET_DIRNAME,
@@ -11,6 +11,7 @@ from taskbuddy.constants import (
     DB_DIRNAME,
     SQLITE_DB_FILE,
     DD_MM_YYYY_HH_MM,
+    MIGRATION_STATUS_FILENAME,
 )
 
 
@@ -41,9 +42,23 @@ def get_path(
     return str(path) if to_string else path
 
 
+# Check for db
+def isa_db(file_name: str) -> bool:
+    return file_name.endswith(".db")
+
+
 # Get default db path
-def get_default_db_path() -> str:
-    return get_path(DB_DIRNAME, SQLITE_DB_FILE)
+def get_db_path(db_name: str = None) -> str:
+    if db_name is not None and not isa_db(db_name):
+        raise ValueError(f"{db_name} is not a database")
+    if db_name is None:
+        db_name = SQLITE_DB_FILE
+    return get_path(DB_DIRNAME, db_name)
+
+
+# Get migration status path
+def get_migration_status_file() -> str:
+    return get_path(DB_DIRNAME, MIGRATION_STATUS_FILENAME)
 
 
 # Check if the file exists or not
@@ -51,6 +66,34 @@ def file_exists(dir_name: str, file_name: str) -> bool:
     project_path = Path.cwd()
     file_path = project_path / dir_name / file_name
     return file_path.exists()
+
+
+# Check if MIGRATION_STATUS_FILE exists or not
+def db_status_file_exists() -> bool:
+    return file_exists(DB_DIRNAME, MIGRATION_STATUS_FILENAME)
+
+
+# Write to status file
+def write_status_file(db_path: str) -> None:
+    try:
+        status_file_path = get_migration_status_file()
+        dbname = os.path.basename(db_path)
+        with open(status_file_path, "w") as f:
+            f.write(dbname)
+    except Exception as e:
+        # Optionally, log the exception or re-raise it with additional context
+        raise RuntimeError(f"Failed to write status file for {db_path}: {e}")
+
+
+# Read status file
+def read_status_file() -> str:
+    try:
+        status_file = get_migration_status_file()
+        with open(status_file, "r") as f:
+            file_name = f.read()
+    except FileNotFoundError:
+        file_name = None
+    return file_name
 
 
 # Parse and format the date in DD-MM-YYYY HH:MM format

@@ -1,13 +1,18 @@
 # from dotenv import load_dotenv
 import sqlite3
-from taskbuddy.utils import get_default_db_path
+from taskbuddy.utils import (
+    get_db_path,
+    read_status_file,
+)
 
 
 class DatabaseConnectionFactory:
     @staticmethod
     def create_connection(db_type="sqlite"):
         if db_type == "sqlite":
-            return sqlite3.connect(get_default_db_path())
+            file_name = read_status_file()
+            return sqlite3.connect(get_db_path(file_name))
+
         # Future extension for other databases can be added here
         raise ValueError(f"Unsupported database type: {db_type}")
 
