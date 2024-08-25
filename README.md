@@ -23,6 +23,11 @@ python -m pip install -e .
 ```
 ### Usage
 
+#### Setup
+```bash
+taskbuddy setup --db_name='taskbuddy.db'
+```
+
 #### Adding a Task
 ```bash
 taskbuddy add --task="Task Description" --due="DD-MM-YYYY"
