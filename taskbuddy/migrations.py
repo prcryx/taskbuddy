@@ -1,4 +1,3 @@
-import os.path
 import sqlite3
 import click
 from taskbuddy.constants import (
@@ -8,7 +7,7 @@ from taskbuddy.utils import (
     get_path,
     get_db_path,
     db_status_file_exists,
-    get_migration_status_file,
+    write_status_file,
 )
 
 
@@ -39,10 +38,13 @@ def run_migration(db_name: str = None):
     conn.close()
 
     # Mark the migration as done
-    status_file_path = get_migration_status_file()
-    dbname = os.path.basename(db_path)
-    with open(status_file_path, "w") as f:
-        f.write(dbname)
-        f.close()
+    try:
+        write_status_file(db_path)
+    except (OSError, IOError) as e:
+        # Handle specific I/O related exceptions
+        click.echo(f"An error occurred while writing the status file: {e}")
+    except Exception as e:
+        # Handle unexpected exceptions
+        click.echo(f"An unexpected error occurred: {e}")
 
     click.echo("[200|Ok]: Migrations completed successfully.")

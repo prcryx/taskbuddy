@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Union
 from dateutil import parser
+import os
 
 from taskbuddy.constants import (
     ASSET_DIRNAME,
@@ -70,6 +71,29 @@ def file_exists(dir_name: str, file_name: str) -> bool:
 # Check if MIGRATION_STATUS_FILE exists or not
 def db_status_file_exists() -> bool:
     return file_exists(DB_DIRNAME, MIGRATION_STATUS_FILENAME)
+
+
+# Write to status file
+def write_status_file(db_path: str) -> None:
+    try:
+        status_file_path = get_migration_status_file()
+        dbname = os.path.basename(db_path)
+        with open(status_file_path, "w") as f:
+            f.write(dbname)
+    except Exception as e:
+        # Optionally, log the exception or re-raise it with additional context
+        raise RuntimeError(f"Failed to write status file for {db_path}: {e}")
+
+
+# Read status file
+def read_status_file() -> str:
+    try:
+        status_file = get_migration_status_file()
+        with open(status_file, "r") as f:
+            file_name = f.read()
+    except FileNotFoundError:
+        file_name = None
+    return file_name
 
 
 # Parse and format the date in DD-MM-YYYY HH:MM format
