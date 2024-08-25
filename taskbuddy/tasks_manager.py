@@ -71,6 +71,21 @@ class TaskManager:
             }
         )
 
+    def view_task_by_id(self, task_id: int):
+        query = f"""
+            SELECT
+                {DB_CONSTANTS.TASKS_COLUMN_ID},
+                {DB_CONSTANTS.TASKS_COLUMN_TASK},
+                {DB_CONSTANTS.TASKS_COLUMN_CREATED_AT},
+                {DB_CONSTANTS.TASKS_COLUMN_DUE_DATE},
+                {DB_CONSTANTS.TASKS_COLUMN_COMPLETED}
+            FROM {DB_CONSTANTS.TASKS_TABLE}
+            WHERE {DB_CONSTANTS.TASKS_COLUMN_ID}={task_id};
+            """
+        self.db_adapter.execute(query)
+        result = self.db_adapter.fetch_one()
+        return self._map_to_task(result)
+
 
 # Factory for creating a TaskManager instance
 def create_task_manager(db_type="sqlite"):

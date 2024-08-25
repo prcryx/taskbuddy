@@ -59,16 +59,23 @@ def add(ctx, task_description, due_date):
 
 # View All Task Functionality
 @cli.command(name="ls")
-@click.option("--all", "list_all", is_flag=True, required=True)
+@click.option("--all", "list_all", is_flag=True)
+@click.option(
+    "--id",
+    "task_id",
+)
 @click.pass_context
 @validate_setup
-def list_tasks(ctx, list_all: bool):
+def list_tasks(ctx, list_all: bool = None, task_id: int = None):
     """List tasks."""
     task_manager: TaskManager = ctx.obj
     if list_all:
         tasks: [Task] = task_manager.view_all_tasks()
         for task in tasks:
             print_task(task)
+    elif task_id is not None:
+        task: Task = task_manager.view_task_by_id(task_id)
+        print_task(task)
     else:
         click.echo("Please specify --all to list all task.")
 

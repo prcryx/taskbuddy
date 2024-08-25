@@ -77,7 +77,7 @@ def test_view_task(mocker, mock_task_manager):
     mock_view_task = mocker.patch.object(mock_task_manager, "view_all_tasks")
 
     # Define a sample task ID and task instance
-    mock_task = [
+    mock_tasks = [
         Task.from_dict(
             {
                 "id": 1,
@@ -88,13 +88,34 @@ def test_view_task(mocker, mock_task_manager):
     ]
 
     # Mock the return value of view_task
-    mock_view_task.return_value = mock_task
+    mock_view_task.return_value = mock_tasks
 
     # Call the view_task method
     result = mock_task_manager.view_all_tasks()
 
     # Assert that the view_task method was called with the correct argument
     mock_view_task.assert_called_once()
+
+    # Assert that the return value is the expected task instance
+    assert result == mock_tasks
+
+
+def test_view_task_by_id(mocker, mock_task_manager):
+    mock_view_single_task = mocker.patch.object(
+        mock_task_manager, "view_task_by_id"
+    )
+
+    mock_task = Task.from_dict(
+        {
+            "id": 1,
+            "task": "New Task",
+            "due": "12-09-2024",
+        }
+    )
+    mock_view_single_task.return_value = mock_task
+
+    # Call the view_task method
+    result = mock_task_manager.view_task_by_id(task_id=1)
 
     # Assert that the return value is the expected task instance
     assert result == mock_task
