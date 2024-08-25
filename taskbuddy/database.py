@@ -34,6 +34,9 @@ class SQLiteAdapter:
     def fetch_all(self):
         return self.cursor.fetchall()
 
+    def fetch_one(self):
+        return self.cursor.fetchone()
+
     def close(self):
         self.cursor.close()
         self.connection.close()
