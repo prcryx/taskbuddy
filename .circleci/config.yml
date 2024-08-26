@@ -15,6 +15,7 @@ jobs:
             python -m venv venv
             . venv/bin/activate
             pip install -r requirements/dev.txt
+            python -m pip install .
       - run:
           name: Set PYTHONPATH
           command: echo "export PYTHONPATH=./taskbuddy" >> $BASH_ENV
