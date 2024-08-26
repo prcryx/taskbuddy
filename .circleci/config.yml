@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  python: .circleci/python@2.1.1
+  python: circleci/python@2.1.1
 
 jobs:
   build-and-test:
@@ -9,11 +9,20 @@ jobs:
     executor:  python/default
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
+      - run:
+          name: Set up Python environment
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements/dev.txt
+      - run:
+          name: Set PYTHONPATH
+          command: echo "export PYTHONPATH=./taskbuddy" >> $BASH_ENV
       - run:
           name: Run Tests
-          command: pytest -v
+          command: |
+            . venv/bin/activate
+            pytest -v
 # Orchestrate jobs using workflows
 workflows:
   sample:
