@@ -12,21 +12,14 @@ jobs:
       - run:
           name: Set up Python environment
           command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install -r requirements/dev.txt
+            pip install --no-cache-dir --upgrade pip \
+            && pip install --no-cache-dir -r requirements/dev.txt
             python -m pip install .
       - run:
-          name: Set PYTHONPATH
-          command: echo "export PYTHONPATH=./taskbuddy" >> $BASH_ENV
-      - run:
           name: Run Tests
-          command: |
-            . venv/bin/activate
-            pytest -v
+          command: pytest -v
 # Orchestrate jobs using workflows
 workflows:
-  sample:
-    # Inside the workflow, you define the jobs you want to run.
+  taskbuddy:
     jobs:
       - build-and-test
