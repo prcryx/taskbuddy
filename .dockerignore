@@ -1,0 +1,15 @@
+env/
+db/
+**.egg-info/
+__pycache__
+**/__pycache__/
+.git
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+venv/
+.DS_Store
+Dockerfile
+.dockerignore

@@ -60,6 +60,19 @@ taskbuddy del --all
 taskbuddy search --due="DD--MM-YYYY"
 ```
 
+### Running in Docker Container
+
+#### Build Docker image
+```bash
+docker build --build-arg PACKAGE_VERSION=1.0.1 -t taskbuddy .
+```
+
+#### Run the container in interactive mode
+```bash
+# docker run --name=cli -t -d taskbuddy
+ docker run --name=cli -it -d taskbuddy
+```
+
 ### Contributing
 Feel free to contribute to TaskBuddy by submitting pull requests or opening issues.
 
