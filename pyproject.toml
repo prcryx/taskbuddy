@@ -11,8 +11,13 @@ authors = [
 description = "TaskBuddy is a powerful, easy-to-use CLI tool designed for effortless task scheduling and management that boost your productivity and unlock your true potential! 🌟"
 readme = "README.md"
 dependencies = [
-    'click'
+    'click',
+    'python-dateutil',
 ]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "dirty-tag"
 
 [tool.setuptools]
 packages = ["taskbuddy"]
